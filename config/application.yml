@@ -5,13 +5,14 @@ server:
   port: 0
   # The stop processing uses a timeout which provides a grace period during which existing requests will be allowed to complete but no new requests will be permitted
   shutdown: graceful
-
+ 
 # embedded database init, supports mysql too trough the 'mysql' spring profile
 spring:
   sql:
     init:
-      schema-locations: classpath*:db/hsqldb/schema.sql
-      data-locations: classpath*:db/hsqldb/data.sql
+      schema-locations: classpath*:db/mysql/schema.sql
+      data-locations: classpath*:db/mysql/data.sql
+      mode: ALWAYS
   sleuth:
     sampler:
       probability: 1.0
@@ -21,6 +22,14 @@ spring:
       allow-override: true
       # Override configuration with any local property source
       override-none: true
+    azure:
+      keyvault:
+        secret:
+          property-source-enabled: true
+          property-sources:
+            - name: key-vault-property-source-1
+              endpoint: https://kv-petclinic-24a28f.vault.azure.net/
+              credential.managed-identity-enabled: true
   jpa:
     open-in-view: false
     hibernate:
@@ -34,7 +43,6 @@ management.endpoints.web.exposure.include: "*"
 # Temporary hack required by the Spring Boot 2 / Spring Cloud Finchley branch
 # Waiting issue https://github.com/spring-projects/spring-boot/issues/13042
 spring.cloud.refresh.refreshable: false
-
 
 # Logging
 logging.level.org.springframework: INFO
@@ -54,35 +62,9 @@ management:
     export:
       prometheus:
         enabled: true
-
-# Chaos Engineering
----
-spring:
-  config:
-    activate:
-      on-profile: chaos-monkey      
-management.endpoint.chaosmonkey.enabled: true
-chaos:
-  monkey:
-    enabled: true
-    watcher:
-      component: false
-      controller: false
-      repository: false
-      rest-controller: false
-      service: false
-
----
-spring:
-  config:
-    activate:
-      on-profile: mysql
-  datasource:
-    url: jdbc:mysql://localhost:3306/petclinic?useSSL=false
-    username: root
-    password: petclinic
-  sql:
-    init:
-      schema-locations: classpath*:db/mysql/schema.sql
-      data-locations: classpath*:db/mysql/data.sql
-      mode: ALWAYS
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discovery-server:8761/eureka/
+  instance:
+    preferIpAddress: true

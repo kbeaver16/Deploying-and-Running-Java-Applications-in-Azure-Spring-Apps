@@ -33,7 +33,7 @@ spring:
           property-source-enabled: true
           property-sources:
             - name: key-vault-property-source-1
-              endpoint: https://<your-kv-name>.vault.azure.net/
+              endpoint: https://kv-petclinic-24a28f.vault.azure.net/
               credential.managed-identity-enabled: true
   jpa:
     open-in-view: false

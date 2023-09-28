@@ -35,6 +35,23 @@ spring:
             - name: key-vault-property-source-1
               endpoint: https://kv-petclinic-24a28f.vault.azure.net/
               credential.managed-identity-enabled: true
+    stream: 
+      bindings:
+        supply-out-0:
+          destination: telemetry
+      binders:
+        eventhub:
+          type: eventhubs
+          default-candidate: true
+          environment:
+            spring:
+              cloud:
+                azure:
+                  eventhubs:
+                    namespace: evhns-petclinic-24a28f
+      poller:
+        initial-delay: 0
+        fixed-delay: 1000  
   jpa:
     open-in-view: false
     hibernate:

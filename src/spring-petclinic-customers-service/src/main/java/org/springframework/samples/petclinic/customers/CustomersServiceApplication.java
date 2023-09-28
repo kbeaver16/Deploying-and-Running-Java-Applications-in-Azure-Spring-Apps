@@ -16,15 +16,14 @@ import org.slf4j.LoggerFactory;
 @SpringBootApplication
 public class CustomersServiceApplication {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(CustomersServiceApplication.class);
+ private static final Logger LOGGER = LoggerFactory.getLogger(CustomersServiceApplication.class);
 
-	public static void main(String[] args) {
-		SpringApplication.run(CustomersServiceApplication.class, args);
-	}
+ public static void main(String[] args) {
+SpringApplication.run(CustomersServiceApplication.class, args);
+ }
 
-	@ServiceActivator(inputChannel = "telemetry.errors")
+ @ServiceActivator(inputChannel = "telemetry.errors")
     public void producerError(Message<?> message) {
         LOGGER.error("Handling Producer ERROR: " + message);
     }
-}   
-
+}

@@ -32,5 +32,4 @@ public class ManualProducerConfiguration {
                          .doOnNext(m -> LOGGER.info("Manually sending message {}", m))
                          .doOnError(t -> LOGGER.error("Error encountered", t));
     }
-}   
-
+}
